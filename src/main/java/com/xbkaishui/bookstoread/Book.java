@@ -1,6 +1,5 @@
 package com.xbkaishui.bookstoread;
 
-import org.jetbrains.annotations.NotNull;
 
 import java.time.LocalDate;
 
@@ -38,7 +37,7 @@ public final class Book implements Comparable<Book> {
     }
 
     @Override
-    public int compareTo(@NotNull Book o) {
+    public int compareTo(Book o) {
         return this.title.compareTo(o.title);
     }
 }
