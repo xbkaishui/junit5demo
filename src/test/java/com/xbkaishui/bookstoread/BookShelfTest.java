@@ -1,8 +1,10 @@
 package com.xbkaishui.bookstoread;
 
+import com.xbkaishui.bookstoread.resolver.BooksParameterResolver;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.time.LocalDate;
 import java.time.Month;
@@ -17,6 +19,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("<= BookShelf Specification =>")
+@ExtendWith(BooksParameterResolver.class)
 class BookShelfTest {
 
     private BookShelf shelf;
@@ -26,12 +29,16 @@ class BookShelfTest {
     private Book cleanCode;
 
     @BeforeEach
-    void init() {
+    void init(Map<String, Book> books) {
         shelf = new BookShelf();
-        effectiveJava = new Book("Effective Java", "Joshua Bloch", LocalDate.of(2008, Month.MAY, 8));
-        codeComplete = new Book("Code Complete", "Steve McConnel", LocalDate.of(2004, Month.JUNE, 9));
-        mythicalManMonth = new Book("The Mythical Man-Month", "Frederick Phillips Brooks", LocalDate.of(1975, Month.JANUARY, 1));
-        cleanCode = new Book("Clean Code", "Robert C. Martin", LocalDate.of(2008, Month.MAY, 12));
+        this.effectiveJava = books.get("Effective Java");
+        this.codeComplete = books.get("Code Complete");
+        this.mythicalManMonth = books.get("The Mythical Man-Month");
+        this.cleanCode = books.get("Clean Code");
+//        effectiveJava = new Book("Effective Java", "Joshua Bloch", LocalDate.of(2008, Month.MAY, 8));
+//        codeComplete = new Book("Code Complete", "Steve McConnel", LocalDate.of(2004, Month.JUNE, 9));
+//        mythicalManMonth = new Book("The Mythical Man-Month", "Frederick Phillips Brooks", LocalDate.of(1975, Month.JANUARY, 1));
+//        cleanCode = new Book("Clean Code", "Robert C. Martin", LocalDate.of(2008, Month.MAY, 12));
     }
 
     @Test
@@ -80,8 +87,8 @@ class BookShelfTest {
         shelf.add(effectiveJava, codeComplete, mythicalManMonth, cleanCode);
         Map<Year, List<Book>> booksByPublicationYear = shelf.groupByPublicationYear();
         assertThat(booksByPublicationYear).containsKey(Year.of(2008)).containsValues(Arrays.asList(effectiveJava, cleanCode));
-        assertThat(booksByPublicationYear).containsKey(Year.of(2004)).containsValues(Arrays.asList(codeComplete));
-        assertThat(booksByPublicationYear).containsKey(Year.of(1975)).containsValues(Arrays.asList(mythicalManMonth));
+        assertThat(booksByPublicationYear).containsKey(Year.of(2004)).containsValues(singletonList(codeComplete));
+        assertThat(booksByPublicationYear).containsKey(Year.of(1975)).containsValues(singletonList(mythicalManMonth));
     }
 
     @Test
