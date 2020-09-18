@@ -1,5 +1,6 @@
 package com.xbkaishui.bookstoread;
 
+import com.xbkaishui.bookstoread.exception.BookShelfCapacityReached;
 import com.xbkaishui.bookstoread.filter.BookFilter;
 
 import java.time.Year;
@@ -17,13 +18,34 @@ import static java.util.stream.Collectors.groupingBy;
 public class BookShelf {
 
     private List<Book> books = new ArrayList<>();
+    private Integer capacity = 10;
+
+    public BookShelf() {
+    }
+
+    public BookShelf(Integer capacity) {
+        this.capacity = capacity;
+    }
+
+    public Integer getCapacity() {
+        return capacity;
+    }
+
+    public void setCapacity(Integer capacity) {
+        this.capacity = capacity;
+    }
 
     public List<Book> books() {
         return Collections.unmodifiableList(books);
     }
 
-    public void add(Book... booksToAdd) {
-        books.addAll(Arrays.asList(booksToAdd));
+    public void add(Book... booksToAdd) throws BookShelfCapacityReached {
+        Arrays.stream(booksToAdd).forEach(book -> {
+            if (books.size() == capacity) {
+                throw new BookShelfCapacityReached(String.format("BookShelf capacity of %d is reached. You can't add more books.", this.capacity));
+            }
+            books.add(book);
+        });
     }
 
     public List<Book> arrange() {
@@ -53,7 +75,8 @@ public class BookShelf {
     public List<Book> findBooksByTitle(String title) {
         return findBooksByTitle(title, b -> true);
     }
-    public List<Book> findBooksByTitle(String title, BookFilter filter){
+
+    public List<Book> findBooksByTitle(String title, BookFilter filter) {
         return books.stream().filter(book -> book.getTitle().toLowerCase().contains(title.toLowerCase())).filter(b -> filter.apply(b)).collect(Collectors.toList());
     }
 }

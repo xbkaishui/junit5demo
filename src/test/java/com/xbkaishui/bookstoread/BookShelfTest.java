@@ -1,5 +1,6 @@
 package com.xbkaishui.bookstoread;
 
+import com.xbkaishui.bookstoread.exception.BookShelfCapacityReached;
 import com.xbkaishui.bookstoread.resolver.BooksParameterResolver;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -100,5 +101,13 @@ class BookShelfTest {
                 .containsKey("Frederick Phillips Brooks")
                 .containsValues(singletonList(mythicalManMonth));
         assertThat(booksByAuthor).containsKey("Robert C. Martin").containsValues(singletonList(cleanCode));
+    }
+
+    @Test
+    void throwsExceptionWhenBooksAreAddedAfterCapacityIsReached() {
+        BookShelf bookShelf = new BookShelf(2);
+        bookShelf.add(effectiveJava, codeComplete);
+        BookShelfCapacityReached throwsException = assertThrows(BookShelfCapacityReached.class, () -> bookShelf.add(mythicalManMonth));
+        assertEquals("BookShelf capacity of 2 is reached. You can't add more books.", throwsException.getMessage());
     }
 }
