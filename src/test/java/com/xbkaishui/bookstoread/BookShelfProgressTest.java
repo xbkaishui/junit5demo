@@ -3,6 +3,7 @@ package com.xbkaishui.bookstoread;
 import com.xbkaishui.bookstoread.resolver.BooksParameterResolver;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -41,6 +42,8 @@ public class BookShelfProgressTest {
         assertThat(progress.getToRead()).isEqualTo(100);
     }
 
+    @Tag("nightly")
+    @Tag("generate-progress")
     @Test
     @DisplayName("is 40% completed and 60% to-read when 2 books are finished and 3 books not read yet")
     void progressWithCompletedAndToReadPercentages() {
