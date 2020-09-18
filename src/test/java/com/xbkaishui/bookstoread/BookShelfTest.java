@@ -1,6 +1,7 @@
 package com.xbkaishui.bookstoread;
 
 import com.xbkaishui.bookstoread.exception.BookShelfCapacityReached;
+import com.xbkaishui.bookstoread.extension.LoggingTestExecutionExceptionHandler;
 import com.xbkaishui.bookstoread.resolver.BooksParameterResolver;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -18,6 +19,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("<= BookShelf Specification =>")
+@ExtendWith(LoggingTestExecutionExceptionHandler.class)
 @ExtendWith(BooksParameterResolver.class)
 class BookShelfTest {
 
